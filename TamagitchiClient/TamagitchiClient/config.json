@@ -1,0 +1,28 @@
+﻿{
+  "OpenApi": {
+    "ApiKey": "<redacted>"
+  },
+  "ConnectionStrings": {
+    "TamagitchiDatabase": "Server=localhost,1433;Database=Tamagitchi;TrustServerCertificate=True;MultipleActiveResultSets=true;User Id=sa;Password=<redacted>;"
+  },
+  "CallbackService": {
+    "Host": "127.0.0.1",
+    "ExternalIp": "172.30.176.1",
+    "Port": 1313
+  },
+  "GitlabApi": {
+    "Host": "http://localhost:1380",
+    "Username": "root",
+    "Password": "<redacted>"
+  },
+  "Settings": {
+    "StarvationRate": "6:0:0",
+    "MaxDisplayAge": "2:0:0",
+    "Screen": {
+      "Width": 800,
+      "Height": 480,
+      "Fullscreen": false
+    },
+    "GitlabUserId": 2
+  }
+}
