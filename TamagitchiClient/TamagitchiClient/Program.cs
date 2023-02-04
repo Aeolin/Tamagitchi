@@ -14,14 +14,8 @@ using TamagitchiClient.GitConnector.Clients.Gitlab;
 using TamagitchiClient.GPT3Prompts;
 using TamagitchiClient.TamagotchiLogic;
 using TamagitchiClient.TamagotchiLogic.Models;
-using System.Runtime.InteropServices;
 using System;
 
-[DllImport("kernel32.dll", SetLastError = true)]
-[return: MarshalAs(UnmanagedType.Bool)]
-static extern bool AllocConsole();
-
-AllocConsole();
 var config = new ConfigurationBuilder().AddJsonFile("config.json").Build();
 var container = Injector.GetContainer();
 container.Register<IConfiguration>(DependencyStrategy.AtomicInstance, true, config);
