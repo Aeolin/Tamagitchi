@@ -39,6 +39,8 @@ namespace TamagitchiClient
     public Tamagitchi(TamagotchiCore core, IConfiguration config, IDependencyContainer container)
     {
       _graphics = new GraphicsDeviceManager(this);
+      _graphics.GraphicsProfile = GraphicsProfile.Reach;
+      _graphics.PreferMultiSampling = false;
       var screenSettings = config.GetSection("Settings:Screen");
       _graphics.PreferredBackBufferWidth = screenSettings.GetValue<int>("Width");
       _graphics.PreferredBackBufferHeight = screenSettings.GetValue<int>("Height");
@@ -89,7 +91,7 @@ namespace TamagitchiClient
             new AbsolutePosition(new Vector2(0, 90)),
             false))
         .WithRelativeScaling(0.5F)
-        .WithPercentageSprite("Gui/Healthbar", () => _currentUpdate?.Pet?.HealthPercentage ?? 0, 50, FrameSizeMode.Column, 96)
+        .WithPercentageSprite("Gui/Healthbar", () => _currentUpdate?.Pet?.HealthPercentage ?? 0, 50, FrameSizeMode.Column, 48)
         .WithRelativePosition(0.01F, 0.1F, null, null)
         .WithRelativeScaling(0.3F)
         .Build();
@@ -118,7 +120,7 @@ namespace TamagitchiClient
               true
           ))
         .WithRelativeScaling(0.3F)
-        .WithPercentageSprite("Gui/Healthbar", () => _currentUpdate?.Pet?.HealthPercentage ?? 0, 50, FrameSizeMode.Column, 96)
+        .WithPercentageSprite("Gui/Healthbar", () => _currentUpdate?.Pet?.HealthPercentage ?? 0, 50, FrameSizeMode.Column, 48)
         .WithRelativePosition(0.01F, 0.1F, null, null)
         .WithRelativeScaling(0.3F);
       _updateScene = updateBuilder.Build();
@@ -147,7 +149,7 @@ namespace TamagitchiClient
               true
           ))
         .WithRelativeScaling(0.3F)
-        .WithPercentageSprite("Gui/Healthbar", () => _currentUpdate?.Pet?.HealthPercentage ?? 0, 50, FrameSizeMode.Column, 96)
+        .WithPercentageSprite("Gui/Healthbar", () => _currentUpdate?.Pet?.HealthPercentage ?? 0, 50, FrameSizeMode.Column, 48)
         .WithRelativePosition(0.01F, 0.1F, null, null)
         .WithRelativeScaling(0.3F);
       _udpateSceneHeadpat = headpatBuilder.Build();
@@ -182,9 +184,10 @@ namespace TamagitchiClient
 
         case GameState.Idle:
           if (gameTime.TotalGameTime - _sceneStartTime > TimeSpan.FromSeconds(15))
-          {
-            if (_coreLogic?.TryGetNextUpdate(out _currentUpdate) == true)
+          { 
+            if (_coreLogic?.TryGetNextUpdate(out var update) == true)
             {
+              _currentUpdate = update;
               _state = GameState.DisplayUpdate;
               _activeScence = _currentUpdate.Animation != null ? _udpateSceneHeadpat : _updateScene;
               _sceneStartTime = gameTime.TotalGameTime;

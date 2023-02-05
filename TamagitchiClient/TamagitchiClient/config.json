@@ -1,19 +1,19 @@
 ﻿{
   "OpenApi": {
-    "ApiKey": "<redacted>"
+    "ApiKey": "<openaikey>"
   },
   "ConnectionStrings": {
-    "TamagitchiDatabase": "Server=localhost,1433;Database=Tamagitchi;TrustServerCertificate=True;MultipleActiveResultSets=true;User Id=sa;Password=<redacted>;"
+    "TamagitchiDatabase": "Server=localhost,1433;Database=Tamagitchi;TrustServerCertificate=True;MultipleActiveResultSets=true;User Id=sa;Password=<dbpassword>"
   },
   "CallbackService": {
     "Host": "127.0.0.1",
-    "ExternalIp": "172.30.176.1",
+    "ExternalIp": "172.17.0.1",
     "Port": 1313
   },
   "GitlabApi": {
-    "Host": "http://localhost:1380",
+    "Host": "http://localhost:80",
     "Username": "root",
-    "Password": "<redacted>"
+    "Password": "<gitlabpassword>"
   },
   "Settings": {
     "StarvationRate": "6:0:0",
@@ -23,6 +23,13 @@
       "Height": 480,
       "Fullscreen": false
     },
-    "GitlabUserId": 2
+    "GitlabUserId": 4
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Trace",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
   }
 }

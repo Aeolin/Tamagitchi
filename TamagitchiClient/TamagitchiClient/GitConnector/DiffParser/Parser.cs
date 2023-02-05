@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TamagitchiClient.GitConnector.DiffParser
 {
   public class Parser
   {
-
+    private static readonly Regex MatchHeader = new Regex("@@.*@@(.*)\n", RegexOptions.Compiled);
     public static List<Diff> GetDiffs(string diffString) => new Parser().ParseDiffString(diffString).ToList();
     public static Diff[] GetDiffs(string diffString, string beforeFile, string afterFile) => new Parser().ParseDiffString(diffString, beforeFile, afterFile).ToArray();
 
@@ -21,6 +22,13 @@ namespace TamagitchiClient.GitConnector.DiffParser
 
     public IEnumerable<Diff> ParseDiffString(string diffString, string beforeFile, string afterFile)
     {
+      var match = MatchHeader.Match(diffString);
+      if(match.Success && match.Groups[1].Value != "")
+      {
+        var index = match.Groups[1].Index;
+        diffString = diffString.Insert(index, "\n");
+      }
+
       var queue = new Queue<string>(diffString.Split('\n'));
       var chunk = parseDiffChunk(queue);
       var diff = new Diff { AfterFile= afterFile, BeforeFile = beforeFile, Chunks = new List<DiffChunk> { chunk } };

@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TamagitchiClient.Database;
+using TamagitchiClient.GitConnector.DiffParser;
 using TamagitchiClient.GitConnector.Models;
 using TamagitchiClient.GPT3Prompts;
 using TamagitchiClient.TamagotchiLogic.Models;
@@ -98,7 +99,7 @@ namespace TamagitchiClient.TamagotchiLogic
             var pet = petLookup[commit.User.Id];
             var food = Math.Max(commit.Diffs
               .SelectMany(x => x.Chunks)
-              .Sum(x => x.AfterLineCount) / 25, 1);
+              .Sum(x => x.Lines.Count(x => x.Mode != LineMode.Unmodified)) / 10, 1);
 
             var before = pet.CurrentHealth;
             pet.LastFood = now;
@@ -106,7 +107,7 @@ namespace TamagitchiClient.TamagotchiLogic
             var newHealth = Math.Min(pet.MaxHealth, pet.CurrentHealth + food);
             var added = commit.Diffs.Count(x => x.Added);
             var deleted = commit.Diffs.Count(x => x.Deleted);
-            var changes = commit.Diffs.Sum(x => x.Chunks.Sum(c => c.AfterLineCount));
+            var changes = commit.Diffs.SelectMany(x => x.Chunks).Sum(x => x.Lines.Count(x => x.Mode != LineMode.Unmodified));
             var request = new GenerateTextRequest(pet, newHealth, $"Commit: {added} files added, {deleted} files removed, {changes} places changed");
             pet.CurrentHealth = newHealth;
             var text = await _promptGen.GenerateTextAsync(request);

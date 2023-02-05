@@ -105,10 +105,10 @@ namespace TamagitchiClient
 
     public static async Task CreatePushWebhookAsync(this GitLabClient client, IConfiguration config, TamagitchiProject project)
     {
-      var request = new CreateWebhookRequest($"http://{config.GetExternalUrl()}/api/callback/gitlab/push/{project.Id}")
+      var request = new CreateWebhookRequest($"{config.GetExternalUrl()}/api/callback/gitlab/push/{project.Id}")
       {
         PushEvents = true,
-        
+        EnableSslVerification = false
       };
 
       var hook = await client.Webhooks.CreateAsync((int)project.GitlabId, request);
